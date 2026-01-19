@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Sun Berries</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+    <div id="login-screen" class="flex items-center justify-center min-h-screen">
+        <div class="bg-white p-8 rounded-xl shadow-lg w-96">
+            <h2 class="text-2xl font-bold text-center text-green-700 mb-6">Acceso Admin</h2>
+            <form id="loginForm" class="space-y-4">
+                <input type="email" id="email" placeholder="Correo" class="w-full p-2 border rounded" required>
+                <input type="password" id="password" placeholder="Contraseña" class="w-full p-2 border rounded" required>
+                <button type="submit" class="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">Entrar</button>
+            </form>
+            <p id="loginError" class="text-red-500 text-sm mt-2 hidden text-center"></p>
+        </div>
+    </div>
+
+    <div id="dashboard-screen" class="hidden">
+        <nav class="bg-green-700 text-white p-4 flex justify-between items-center shadow-md">
+            <h1 class="text-xl font-bold">Sun Berries Analytics</h1>
+            <button onclick="logout()" class="text-sm bg-green-800 px-3 py-1 rounded hover:bg-green-900">Cerrar Sesión</button>
+        </nav>
+
+        <div class="max-w-7xl mx-auto p-6">
+            
+            <div class="bg-white p-4 rounded-lg shadow mb-6 flex flex-wrap gap-4 items-end">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700">Fecha Inicio</label>
+                    <input type="date" id="startDate" class="border p-2 rounded">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700">Fecha Fin</label>
+                    <input type="date" id="endDate" class="border p-2 rounded">
+                </div>
+                <button onclick="loadData()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Filtrar Datos</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold text-gray-700 mb-4 text-center">Motivos de Salida</h3>
+                    <canvas id="chartSalida"></canvas>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow">
+                    <h3 class="font-bold text-gray-700 mb-4 text-center">Motivos de Ingreso</h3>
+                    <canvas id="chartIngreso"></canvas>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="p-4 border-b">
+                    <h3 class="font-bold text-gray-700">Registros Detallados (<span id="totalCount">0</span>)</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                            <tr>
+                                <th class="px-6 py-3">Fecha</th>
+                                <th class="px-6 py-3">Nombre</th>
+                                <th class="px-6 py-3">Puesto</th>
+                                <th class="px-6 py-3">Rancho</th>
+                                <th class="px-6 py-3">Motivo Salida</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURACIÓN ---
+        const supabaseUrl = 'https://kqetrbmwznmlizibquus.supabase.co'
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxZXRyYm13em5tbGl6aWJxdXVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzkxOTMsImV4cCI6MjA4NDQxNTE5M30.G06gOQmC5034XLEdGwfQeir6AgcnZa-GVWh2xxXtrhc' // Usa la misma ANON key, la seguridad la maneja el Login
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+
+        // Variables globales para los gráficos
+        let chartSalidaInstance = null;
+        let chartIngresoInstance = null;
+
+        // --- 1. LÓGICA DE AUTENTICACIÓN ---
+        async function checkSession() {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (session) {
+                showDashboard()
+            } else {
+                showLogin()
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault()
+            const email = document.getElementById('email').value
+            const password = document.getElementById('password').value
+            
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+            
+            if (error) {
+                document.getElementById('loginError').innerText = "Error: " + error.message
+                document.getElementById('loginError').classList.remove('hidden')
+            } else {
+                showDashboard()
+            }
+        })
+
+        async function logout() {
+            await supabase.auth.signOut()
+            window.location.reload()
+        }
+
+        function showDashboard() {
+            document.getElementById('login-screen').classList.add('hidden')
+            document.getElementById('dashboard-screen').classList.remove('hidden')
+            // Cargar fechas default (últimos 30 días)
+            if(!document.getElementById('startDate').value) {
+                const today = new Date().toISOString().split('T')[0];
+                const lastMonth = new Date();
+                lastMonth.setDate(lastMonth.getDate() - 30);
+                document.getElementById('endDate').value = today;
+                document.getElementById('startDate').value = lastMonth.toISOString().split('T')[0];
+            }
+            loadData()
+        }
+
+        function showLogin() {
+            document.getElementById('login-screen').classList.remove('hidden')
+            document.getElementById('dashboard-screen').classList.add('hidden')
+        }
+
+        // --- 2. LÓGICA DE DATOS Y GRÁFICOS ---
+        async function loadData() {
+            const start = document.getElementById('startDate').value
+            const end = document.getElementById('endDate').value + 'T23:59:59' // Final del día
+
+            // Fetch a Supabase
+            const { data, error } = await supabase
+                .from('entrevistas_salida')
+                .select('*')
+                .gte('created_at', start)
+                .lte('created_at', end)
+                .order('created_at', { ascending: false })
+
+            if (error) {
+                alert('Error cargando datos: ' + error.message)
+                return
+            }
+
+            renderTable(data)
+            renderCharts(data)
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody')
+            document.getElementById('totalCount').innerText = data.length
+            tbody.innerHTML = ''
+            
+            data.forEach(row => {
+                const date = new Date(row.created_at).toLocaleDateString()
+                tbody.innerHTML += `
+                    <tr class="bg-white border-b hover:bg-gray-50">
+                        <td class="px-6 py-4">${date}</td>
+                        <td class="px-6 py-4 font-medium text-gray-900">${row.nombre_completo}</td>
+                        <td class="px-6 py-4">${row.puesto}</td>
+                        <td class="px-6 py-4">${row.rancho}</td>
+                        <td class="px-6 py-4 text-red-600">${row.motivo_salida}</td>
+                    </tr>
+                `
+            })
+        }
+
+        function renderCharts(data) {
+            // Procesar datos para conteos
+            const countByField = (field) => {
+                return data.reduce((acc, curr) => {
+                    const val = curr[field] || 'Sin dato';
+                    acc[val] = (acc[val] || 0) + 1;
+                    return acc;
+                }, {});
+            }
+
+            const salidaData = countByField('motivo_salida');
+            const ingresoData = countByField('motivo_ingreso');
+
+            // Función helper para crear/actualizar gráfico
+            const createChart = (canvasId, instance, label, rawData, colorInfo) => {
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                if (instance) instance.destroy(); // Destruir anterior si existe
+                
+                return new Chart(ctx, {
+                    type: 'bar', // Puedes cambiar a 'pie' o 'doughnut'
+                    data: {
+                        labels: Object.keys(rawData),
+                        datasets: [{
+                            label: label,
+                            data: Object.values(rawData),
+                            backgroundColor: colorInfo,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: { responsive: true, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+                });
+            }
+
+            chartSalidaInstance = createChart('chartSalida', chartSalidaInstance, 'Renuncias', salidaData, 'rgba(239, 68, 68, 0.6)'); // Rojo
+            chartIngresoInstance = createChart('chartIngreso', chartIngresoInstance, 'Ingresos', ingresoData, 'rgba(34, 197, 94, 0.6)'); // Verde
+        }
+
+        // Iniciar
+        checkSession()
+    </script>
+</body>
+</html>

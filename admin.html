@@ -134,33 +134,23 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                 <div class="bg-white p-3 rounded-lg shadow border-t-4 border-blue-500">
                     <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Apoyo Líder</h4>
-                    <div class="relative h-40 w-full">
-                        <canvas id="chartLider"></canvas>
-                    </div>
+                    <div class="relative h-40 w-full"><canvas id="chartLider"></canvas></div>
                 </div>
                 <div class="bg-white p-3 rounded-lg shadow border-t-4 border-blue-500">
                     <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Pago Acorde</h4>
-                    <div class="relative h-40 w-full">
-                        <canvas id="chartPago"></canvas>
-                    </div>
+                    <div class="relative h-40 w-full"><canvas id="chartPago"></canvas></div>
                 </div>
                 <div class="bg-white p-3 rounded-lg shadow border-t-4 border-blue-500">
                     <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Instalaciones</h4>
-                    <div class="relative h-40 w-full">
-                        <canvas id="chartInstalaciones"></canvas>
-                    </div>
+                    <div class="relative h-40 w-full"><canvas id="chartInstalaciones"></canvas></div>
                 </div>
                 <div class="bg-white p-3 rounded-lg shadow border-t-4 border-blue-500">
                     <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Herramientas</h4>
-                    <div class="relative h-40 w-full">
-                        <canvas id="chartEquipos"></canvas>
-                    </div>
+                    <div class="relative h-40 w-full"><canvas id="chartEquipos"></canvas></div>
                 </div>
                 <div class="bg-white p-3 rounded-lg shadow border-t-4 border-blue-500">
                     <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Capacitación</h4>
-                    <div class="relative h-40 w-full">
-                        <canvas id="chartCapacitacion"></canvas>
-                    </div>
+                    <div class="relative h-40 w-full"><canvas id="chartCapacitacion"></canvas></div>
                 </div>
             </div>
 
@@ -169,8 +159,7 @@
                     <div class="p-4 bg-sun-gold text-white font-bold text-center uppercase tracking-wide">
                         Voz del Colaborador
                     </div>
-                    <div class="overflow-y-auto p-4 space-y-4 bg-gray-50 flex-1" id="feedRecomendaciones">
-                        </div>
+                    <div class="overflow-y-auto p-4 space-y-4 bg-gray-50 flex-1" id="feedRecomendaciones"></div>
                 </div>
 
                 <div class="lg:col-span-2 bg-white rounded-xl shadow-md overflow-hidden flex flex-col h-96">
@@ -204,6 +193,21 @@
 
         const charts = {};
 
+        // ORDEN ESTRICTO PARA LAS ESCALAS
+        const ORDER_ESCALA = ['SIEMPRE', 'CASI SIEMPRE', 'A VECES', 'CASI NUNCA', 'NUNCA'];
+
+        // PALETA DE COLORES DISTINTIVOS PARA RANCHO (Alto contraste)
+        const PALETA_DISTINTIVA = [
+            '#FF6384', // Rojo suave
+            '#36A2EB', // Azul brillante
+            '#FFCE56', // Amarillo
+            '#4BC0C0', // Turquesa
+            '#9966FF', // Violeta
+            '#FF9F40', // Naranja
+            '#8AC249', // Verde lima
+            '#607D8B'  // Gris azulado
+        ];
+
         // --- 2. AUTH ---
         async function checkSession() {
             const { data: { session } } = await adminClient.auth.getSession()
@@ -236,7 +240,6 @@
         function showDashboard() {
             document.getElementById('login-screen').classList.add('hidden')
             document.getElementById('dashboard-screen').classList.remove('hidden')
-            
             if(!document.getElementById('startDate').value) {
                 const date = new Date();
                 const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -258,9 +261,7 @@
                 .lte('created_at', end)
                 .order('created_at', { ascending: false })
 
-            if (error) {
-                alert('Error: ' + error.message); return;
-            }
+            if (error) { alert('Error: ' + error.message); return; }
             
             document.getElementById('kpi-renuncias').innerText = data.length;
             document.getElementById('totalCount').innerText = data.length;
@@ -268,57 +269,80 @@
             renderTable(data);
             renderRecomendaciones(data);
 
-            const countField = (field) => data.reduce((acc, curr) => {
-                const val = curr[field] || 'N/A';
-                acc[val] = (acc[val] || 0) + 1;
-                return acc;
-            }, {});
+            // Helpers para colores
+            const cRed = '#D32F2F';   // Salida
+            const cGreen = '#2E7D32'; // Ingreso / Positivo
+            const cBlue = '#1565C0';  // Escalas
 
-            const cRed = '#D32F2F';
-            const cGreen = '#2E7D32';
-            const cGold = '#FCCB06';
-            const cBlue = '#1565C0';
+            // --- GENERACIÓN DE GRÁFICOS ---
+            
+            // 1. Motivos Salida (ROJO)
+            createChart('chartSalida', 'bar', prepareData(data, 'motivo_salida'), cRed, { indexAxis: 'y' });
+            
+            // 2. Motivos Ingreso (VERDE)
+            createChart('chartIngreso', 'bar', prepareData(data, 'motivo_ingreso'), cGreen, { indexAxis: 'y' });
 
-            createChart('chartSalida', 'bar', countField('motivo_salida'), cRed, { indexAxis: 'y' });
-            createChart('chartIngreso', 'bar', countField('motivo_ingreso'), cGreen, { indexAxis: 'y' });
-            createChart('chartRegresaria', 'doughnut', countField('regresaria_trabajar'), [cGreen, cRed, '#Gray']);
-            createChart('chartRancho', 'pie', countField('rancho'), [cGold, '#FBC02D', '#F9A825', '#F57F17', '#FFF176']);
-            createChart('chartPuesto', 'bar', countField('puesto'), '#455A64', { indexAxis: 'y' });
+            // 3. Regresaría (Doughnut)
+            createChart('chartRegresaria', 'doughnut', prepareData(data, 'regresaria_trabajar'), [cGreen, cRed, '#Gray']);
 
-            createChart('chartLider', 'bar', countField('apoyo_lider'), cBlue);
-            createChart('chartPago', 'bar', countField('pago_acorde'), cBlue);
-            createChart('chartInstalaciones', 'bar', countField('instalaciones_adecuadas'), cBlue);
-            createChart('chartEquipos', 'bar', countField('equipos_herramientas'), cBlue);
-            createChart('chartCapacitacion', 'bar', countField('capacitacion_induccion'), cBlue);
+            // 4. Demografía (Rancho con colores distintivos)
+            createChart('chartRancho', 'pie', prepareData(data, 'rancho'), PALETA_DISTINTIVA);
+            createChart('chartPuesto', 'bar', prepareData(data, 'puesto'), '#455A64', { indexAxis: 'y' });
+
+            // 5. Clima (ORDENADOS: Siempre -> Nunca)
+            createChart('chartLider', 'bar', prepareData(data, 'apoyo_lider', ORDER_ESCALA), cBlue);
+            createChart('chartPago', 'bar', prepareData(data, 'pago_acorde', ORDER_ESCALA), cBlue);
+            createChart('chartInstalaciones', 'bar', prepareData(data, 'instalaciones_adecuadas', ORDER_ESCALA), cBlue);
+            createChart('chartEquipos', 'bar', prepareData(data, 'equipos_herramientas', ORDER_ESCALA), cBlue);
+            createChart('chartCapacitacion', 'bar', prepareData(data, 'capacitacion_induccion', ORDER_ESCALA), cBlue);
         }
 
-        function createChart(canvasId, type, dataObj, colors, extraOptions = {}) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
+        // FUNCIÓN MAESTRA PARA PREPARAR DATOS (Con ordenamiento opcional)
+        function prepareData(data, field, fixedOrder = null) {
+            let labels, values;
             
-            if (charts[canvasId]) {
-                charts[canvasId].destroy();
+            if (fixedOrder) {
+                // Si hay un orden fijo (para las escalas), lo respetamos
+                labels = fixedOrder;
+                values = fixedOrder.map(label => 
+                    data.filter(row => row[field] === label).length
+                );
+            } else {
+                // Si no, contamos normalmente (frecuencia)
+                const counts = data.reduce((acc, curr) => {
+                    const val = curr[field] || 'N/A';
+                    acc[val] = (acc[val] || 0) + 1;
+                    return acc;
+                }, {});
+                labels = Object.keys(counts);
+                values = Object.values(counts);
             }
+            return { labels, values };
+        }
 
-            const labels = Object.keys(dataObj);
-            const values = Object.values(dataObj);
+        function createChart(canvasId, type, chartData, colors, extraOptions = {}) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            if (charts[canvasId]) charts[canvasId].destroy();
+
+            // Lógica de colores (si es string único lo repite, si es array lo usa)
             let bgColors = colors;
             if (typeof colors === 'string') {
-                bgColors = Array(labels.length).fill(colors);
+                bgColors = Array(chartData.labels.length).fill(colors);
             }
 
             charts[canvasId] = new Chart(ctx, {
                 type: type,
                 data: {
-                    labels: labels,
+                    labels: chartData.labels,
                     datasets: [{
-                        data: values,
+                        data: chartData.values,
                         backgroundColor: bgColors,
                         borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false, // Ahora sí funciona porque tiene contenedor padre
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: { display: type === 'doughnut' || type === 'pie' }
                     },

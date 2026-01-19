@@ -133,12 +133,14 @@
 
     <script>
         // --- 1. CONFIGURACIÓN ---
-        // ¡PEGA AQUÍ TUS DATOS DE SUPABASE!
-        const supabaseUrl = 'https://kqetrbmwznmlizibquus.supabase.co'
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxZXRyYm13em5tbGl6aWJxdXVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzkxOTMsImV4cCI6MjA4NDQxNTE5M30.G06gOQmC5034XLEdGwfQeir6AgcnZa-GVWh2xxXtrhc'
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+        // Pega aquí tus claves REALES de Supabase
+        const supabaseUrl = 'TU_URL_DE_SUPABASE' 
+        const supabaseKey = 'TU_CLAVE_ANON_DE_SUPABASE'
+        
+        // CORRECCIÓN AQUÍ: Cambié el nombre de 'supabase' a 'clienteSupabase'
+        const clienteSupabase = supabase.createClient(supabaseUrl, supabaseKey)
 
-        // --- 2. GENERADOR DE ESCALAS (Para no repetir HTML) ---
+        // --- 2. GENERADOR DE ESCALAS ---
         const escalaOptions = ['SIEMPRE', 'CASI SIEMPRE', 'A VECES', 'CASI NUNCA', 'NUNCA'];
         document.querySelectorAll('.pregunta-escala').forEach(div => {
             const name = div.dataset.name;
@@ -164,7 +166,6 @@
             }
         }
         
-        // Listener para radio buttons de motivo ingreso
         document.querySelectorAll('input[name="motivo_ingreso"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
                 const input = document.getElementById('motivo_ingreso_otro');
@@ -193,8 +194,8 @@
             if (dataObj.motivo_ingreso === 'Otros') dataObj.motivo_ingreso = document.getElementById('motivo_ingreso_otro').value;
             if (dataObj.motivo_salida === 'Otros') dataObj.motivo_salida = document.getElementById('motivo_salida_otro').value;
 
-            // Insertar en Supabase
-            const { error } = await supabase.from('entrevistas_salida').insert([dataObj]);
+            // CORRECCIÓN AQUÍ: Usamos 'clienteSupabase' para insertar
+            const { error } = await clienteSupabase.from('entrevistas_salida').insert([dataObj]);
 
             if (error) {
                 alert('Error al guardar: ' + error.message);
@@ -210,3 +211,4 @@
 </body>
 
 </html>
+

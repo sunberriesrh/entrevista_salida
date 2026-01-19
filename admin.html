@@ -132,23 +132,23 @@
 
             <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-gray-200 pb-2 pt-4">Evaluación de Experiencia</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-blue-500">
+                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-gray-300">
                     <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Apoyo Líder</h4>
                     <div class="relative h-40 w-full"><canvas id="chartLider"></canvas></div>
                 </div>
-                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-blue-500">
+                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-gray-300">
                     <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Pago Acorde</h4>
                     <div class="relative h-40 w-full"><canvas id="chartPago"></canvas></div>
                 </div>
-                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-blue-500">
+                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-gray-300">
                     <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Instalaciones</h4>
                     <div class="relative h-40 w-full"><canvas id="chartInstalaciones"></canvas></div>
                 </div>
-                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-blue-500">
+                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-gray-300">
                     <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Herramientas</h4>
                     <div class="relative h-40 w-full"><canvas id="chartEquipos"></canvas></div>
                 </div>
-                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-blue-500">
+                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-gray-300">
                     <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Capacitación</h4>
                     <div class="relative h-40 w-full"><canvas id="chartCapacitacion"></canvas></div>
                 </div>
@@ -196,16 +196,22 @@
         // ORDEN ESTRICTO PARA LAS ESCALAS
         const ORDER_ESCALA = ['SIEMPRE', 'CASI SIEMPRE', 'A VECES', 'CASI NUNCA', 'NUNCA'];
 
-        // PALETA DE COLORES DISTINTIVOS PARA RANCHO (Alto contraste)
+        // --- PALETAS DE COLORES ---
+        
+        // 1. PALETA RANCHO (Alto Contraste)
         const PALETA_DISTINTIVA = [
-            '#FF6384', // Rojo suave
-            '#36A2EB', // Azul brillante
-            '#FFCE56', // Amarillo
-            '#4BC0C0', // Turquesa
-            '#9966FF', // Violeta
-            '#FF9F40', // Naranja
-            '#8AC249', // Verde lima
-            '#607D8B'  // Gris azulado
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
+            '#9966FF', '#FF9F40', '#8AC249', '#607D8B'
+        ];
+
+        // 2. PALETA MAPA DE CALOR (Semáforo Gradual)
+        // Corresponde al orden: Siempre -> Casi Siempre -> A Veces -> Casi Nunca -> Nunca
+        const MAPA_CALOR = [
+            '#2E7D32', // SIEMPRE: Verde Fuerte (Sun Green)
+            '#7CB342', // CASI SIEMPRE: Verde Hoja
+            '#FDD835', // A VECES: Amarillo Sol
+            '#FB8C00', // CASI NUNCA: Naranja
+            '#D32F2F'  // NUNCA: Rojo Alarma
         ];
 
         // --- 2. AUTH ---
@@ -269,10 +275,9 @@
             renderTable(data);
             renderRecomendaciones(data);
 
-            // Helpers para colores
+            // Helpers para colores simples
             const cRed = '#D32F2F';   // Salida
-            const cGreen = '#2E7D32'; // Ingreso / Positivo
-            const cBlue = '#1565C0';  // Escalas
+            const cGreen = '#2E7D32'; // Ingreso
 
             // --- GENERACIÓN DE GRÁFICOS ---
             
@@ -289,15 +294,16 @@
             createChart('chartRancho', 'pie', prepareData(data, 'rancho'), PALETA_DISTINTIVA);
             createChart('chartPuesto', 'bar', prepareData(data, 'puesto'), '#455A64', { indexAxis: 'y' });
 
-            // 5. Clima (ORDENADOS: Siempre -> Nunca)
-            createChart('chartLider', 'bar', prepareData(data, 'apoyo_lider', ORDER_ESCALA), cBlue);
-            createChart('chartPago', 'bar', prepareData(data, 'pago_acorde', ORDER_ESCALA), cBlue);
-            createChart('chartInstalaciones', 'bar', prepareData(data, 'instalaciones_adecuadas', ORDER_ESCALA), cBlue);
-            createChart('chartEquipos', 'bar', prepareData(data, 'equipos_herramientas', ORDER_ESCALA), cBlue);
-            createChart('chartCapacitacion', 'bar', prepareData(data, 'capacitacion_induccion', ORDER_ESCALA), cBlue);
+            // 5. Clima (MAPA DE CALOR)
+            // Usamos la paleta MAPA_CALOR que coincide con el orden ORDER_ESCALA
+            createChart('chartLider', 'bar', prepareData(data, 'apoyo_lider', ORDER_ESCALA), MAPA_CALOR);
+            createChart('chartPago', 'bar', prepareData(data, 'pago_acorde', ORDER_ESCALA), MAPA_CALOR);
+            createChart('chartInstalaciones', 'bar', prepareData(data, 'instalaciones_adecuadas', ORDER_ESCALA), MAPA_CALOR);
+            createChart('chartEquipos', 'bar', prepareData(data, 'equipos_herramientas', ORDER_ESCALA), MAPA_CALOR);
+            createChart('chartCapacitacion', 'bar', prepareData(data, 'capacitacion_induccion', ORDER_ESCALA), MAPA_CALOR);
         }
 
-        // FUNCIÓN MAESTRA PARA PREPARAR DATOS (Con ordenamiento opcional)
+        // FUNCIÓN MAESTRA PARA PREPARAR DATOS
         function prepareData(data, field, fixedOrder = null) {
             let labels, values;
             
@@ -308,7 +314,7 @@
                     data.filter(row => row[field] === label).length
                 );
             } else {
-                // Si no, contamos normalmente (frecuencia)
+                // Si no, contamos normalmente
                 const counts = data.reduce((acc, curr) => {
                     const val = curr[field] || 'N/A';
                     acc[val] = (acc[val] || 0) + 1;
@@ -324,11 +330,14 @@
             const ctx = document.getElementById(canvasId).getContext('2d');
             if (charts[canvasId]) charts[canvasId].destroy();
 
-            // Lógica de colores (si es string único lo repite, si es array lo usa)
+            // Lógica de colores mejorada
             let bgColors = colors;
+            // Si nos pasan un solo color (string), creamos array
             if (typeof colors === 'string') {
                 bgColors = Array(chartData.labels.length).fill(colors);
             }
+            // NOTA: Si nos pasan el array MAPA_CALOR, Chart.js lo asigna en orden a cada barra.
+            // Como forzamos el orden de las etiquetas con ORDER_ESCALA, los colores calzan perfecto.
 
             charts[canvasId] = new Chart(ctx, {
                 type: type,
@@ -345,6 +354,15 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { display: type === 'doughnut' || type === 'pie' }
+                    },
+                    scales: {
+                        // Ocultar eje X en las escalas para limpiar visualmente (opcional, aquí lo dejo visible pero sutil)
+                        x: { display: type !== 'pie' && type !== 'doughnut' },
+                        y: { 
+                            display: type !== 'pie' && type !== 'doughnut',
+                            beginAtZero: true, 
+                            ticks: { stepSize: 1 } // Para que no muestre decimales en conteos
+                        }
                     },
                     ...extraOptions
                 }

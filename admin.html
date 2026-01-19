@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Sun Berries</title>
+    <title>Reporte RH - Sun Berries</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -23,6 +23,35 @@
             }
         }
     </script>
+    <style>
+        /* ESTILOS EXCLUSIVOS PARA IMPRESIÓN */
+        @media print {
+            @page { margin: 1cm; size: landscape; } /* Hoja horizontal para que quepan las gráficas */
+            body { background-color: white; -webkit-print-color-adjust: exact; }
+            
+            /* Ocultar elementos de navegación y control */
+            .no-print, nav, #login-screen, button, input { display: none !important; }
+            
+            /* Mostrar encabezado de reporte solo al imprimir */
+            .print-header { display: block !important; margin-bottom: 20px; text-align: center; }
+            
+            /* Quitar sombras y bordes innecesarios */
+            .shadow-md, .shadow-lg, .shadow-2xl { box-shadow: none !important; }
+            .border-l-4, .border-t-4, .border-t-8 { border: 1px solid #ddd !important; }
+            
+            /* Expandir contenedores con scroll */
+            .h-96, .h-64, .h-40 { height: auto !important; overflow: visible !important; }
+            .overflow-y-auto, .overflow-auto { overflow: visible !important; height: auto !important; }
+            
+            /* Evitar cortes de página en medio de una gráfica */
+            .break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
+            
+            /* Ajustar textos */
+            body { font-size: 10pt; }
+            h1, h2, h3 { color: #006400 !important; }
+        }
+        .print-header { display: none; }
+    </style>
 </head>
 <body class="bg-gray-100 min-h-screen font-sans text-gray-800">
 
@@ -47,9 +76,15 @@
         </div>
     </div>
 
-    <div id="dashboard-screen" class="hidden pb-20">
+    <div id="dashboard-screen" class="hidden pb-20 print:pb-0">
         
-        <nav class="bg-sun-green text-white shadow-lg sticky top-0 z-50">
+        <div class="print-header">
+            <img src="logo.png" style="height: 60px; margin: 0 auto;">
+            <h1 class="text-2xl font-bold mt-2">Reporte de Entrevistas de Salida</h1>
+            <p class="text-sm text-gray-500" id="printDateRange">Periodo del Reporte</p>
+        </div>
+
+        <nav class="bg-sun-green text-white shadow-lg sticky top-0 z-50 no-print">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-20">
                     <div class="flex items-center gap-4">
@@ -68,9 +103,9 @@
             </div>
         </nav>
 
-        <div class="max-w-7xl mx-auto p-6 space-y-8">
+        <div class="max-w-7xl mx-auto p-6 space-y-8 print:p-0 print:space-y-4">
             
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 no-print">
                 <div class="lg:col-span-3 bg-white p-6 rounded-xl shadow-md border-l-4 border-sun-gold flex flex-wrap gap-6 items-end justify-between">
                     <div class="flex gap-4 w-full md:w-auto">
                         <div class="w-1/2 md:w-auto">
@@ -82,9 +117,15 @@
                             <input type="date" id="endDate" class="w-full border-gray-300 border p-2 rounded-lg focus:ring-sun-green focus:border-sun-green">
                         </div>
                     </div>
-                    <button onclick="loadData()" class="w-full md:w-auto bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 shadow-md font-medium transition flex items-center justify-center gap-2">
-                        Actualizar
-                    </button>
+                    <div class="flex gap-2">
+                        <button onclick="loadData()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 shadow-md font-medium transition flex items-center gap-2">
+                            Actualizar
+                        </button>
+                        <button onclick="window.print()" class="bg-gray-700 text-white px-6 py-2 rounded-lg hover:bg-gray-800 shadow-md font-medium transition flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                            Imprimir
+                        </button>
+                    </div>
                 </div>
                 <div class="bg-gradient-to-br from-sun-green to-green-800 p-6 rounded-xl shadow-md text-white flex flex-col justify-center items-center">
                     <h3 class="text-green-100 text-sm font-bold uppercase tracking-wider">Total Entrevistas</h3>
@@ -92,89 +133,82 @@
                 </div>
             </div>
 
-            <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-gray-200 pb-2">Indicadores Clave</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-5 rounded-xl shadow-md">
-                    <h3 class="font-bold text-gray-600 text-center mb-4 text-sm uppercase">Motivos de Salida</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chartSalida"></canvas>
-                    </div>
+            <div class="print-header text-center border-b pb-4 mb-4">
+                <span class="text-xl font-bold">Total Entrevistas en Periodo: </span>
+                <span class="text-2xl font-extrabold text-sun-green" id="kpi-print">0</span>
+            </div>
+
+            <h2 class="text-xl font-bold text-gray-700 border-b-2 border-gray-200 pb-2 break-inside-avoid">Indicadores Clave</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 break-inside-avoid">
+                <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="font-bold text-gray-600 text-center mb-2 text-xs uppercase">Motivos de Salida</h3>
+                    <div class="relative h-64 w-full"><canvas id="chartSalida"></canvas></div>
                 </div>
-                <div class="bg-white p-5 rounded-xl shadow-md">
-                    <h3 class="font-bold text-gray-600 text-center mb-4 text-sm uppercase">Motivos de Ingreso</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chartIngreso"></canvas>
-                    </div>
+                <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="font-bold text-gray-600 text-center mb-2 text-xs uppercase">Motivos de Ingreso</h3>
+                    <div class="relative h-64 w-full"><canvas id="chartIngreso"></canvas></div>
                 </div>
-                <div class="bg-white p-5 rounded-xl shadow-md">
-                    <h3 class="font-bold text-gray-600 text-center mb-4 text-sm uppercase">¿Regresaría a trabajar?</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chartRegresaria"></canvas>
-                    </div>
+                <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="font-bold text-gray-600 text-center mb-2 text-xs uppercase">Lealtad</h3>
+                    <div class="relative h-64 w-full"><canvas id="chartRegresaria"></canvas></div>
                 </div>
             </div>
 
-            <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-gray-200 pb-2 pt-4">Demografía de la Baja</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white p-5 rounded-xl shadow-md">
-                    <h3 class="font-bold text-gray-600 text-center mb-4 text-sm uppercase">Bajas por Rancho</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chartRancho"></canvas>
-                    </div>
+            <h2 class="text-xl font-bold text-gray-700 border-b-2 border-gray-200 pb-2 pt-4 break-inside-avoid">Demografía</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 break-inside-avoid">
+                <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="font-bold text-gray-600 text-center mb-2 text-xs uppercase">Por Rancho</h3>
+                    <div class="relative h-64 w-full"><canvas id="chartRancho"></canvas></div>
                 </div>
-                <div class="bg-white p-5 rounded-xl shadow-md">
-                    <h3 class="font-bold text-gray-600 text-center mb-4 text-sm uppercase">Bajas por Puesto</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chartPuesto"></canvas>
-                    </div>
+                <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="font-bold text-gray-600 text-center mb-2 text-xs uppercase">Por Puesto</h3>
+                    <div class="relative h-64 w-full"><canvas id="chartPuesto"></canvas></div>
                 </div>
             </div>
 
-            <h2 class="text-2xl font-bold text-gray-700 border-b-2 border-gray-200 pb-2 pt-4">Evaluación de Experiencia</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-gray-300">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Apoyo Líder</h4>
+            <h2 class="text-xl font-bold text-gray-700 border-b-2 border-gray-200 pb-2 pt-4 break-inside-avoid">Clima Laboral (Mapa de Calor)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 break-inside-avoid">
+                <div class="bg-white p-2 rounded-lg shadow border border-gray-100">
+                    <h4 class="text-[10px] font-bold text-gray-500 uppercase text-center mb-1">Líder</h4>
                     <div class="relative h-40 w-full"><canvas id="chartLider"></canvas></div>
                 </div>
-                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-gray-300">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Pago Acorde</h4>
+                <div class="bg-white p-2 rounded-lg shadow border border-gray-100">
+                    <h4 class="text-[10px] font-bold text-gray-500 uppercase text-center mb-1">Pago</h4>
                     <div class="relative h-40 w-full"><canvas id="chartPago"></canvas></div>
                 </div>
-                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-gray-300">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Instalaciones</h4>
+                <div class="bg-white p-2 rounded-lg shadow border border-gray-100">
+                    <h4 class="text-[10px] font-bold text-gray-500 uppercase text-center mb-1">Instalaciones</h4>
                     <div class="relative h-40 w-full"><canvas id="chartInstalaciones"></canvas></div>
                 </div>
-                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-gray-300">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Herramientas</h4>
+                <div class="bg-white p-2 rounded-lg shadow border border-gray-100">
+                    <h4 class="text-[10px] font-bold text-gray-500 uppercase text-center mb-1">Herramientas</h4>
                     <div class="relative h-40 w-full"><canvas id="chartEquipos"></canvas></div>
                 </div>
-                <div class="bg-white p-3 rounded-lg shadow border-t-4 border-gray-300">
-                    <h4 class="text-xs font-bold text-gray-500 uppercase text-center mb-2">Capacitación</h4>
+                <div class="bg-white p-2 rounded-lg shadow border border-gray-100">
+                    <h4 class="text-[10px] font-bold text-gray-500 uppercase text-center mb-1">Capacitación</h4>
                     <div class="relative h-40 w-full"><canvas id="chartCapacitacion"></canvas></div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-4">
-                <div class="lg:col-span-1 bg-white rounded-xl shadow-md overflow-hidden flex flex-col h-96">
-                    <div class="p-4 bg-sun-gold text-white font-bold text-center uppercase tracking-wide">
-                        Voz del Colaborador
-                    </div>
-                    <div class="overflow-y-auto p-4 space-y-4 bg-gray-50 flex-1" id="feedRecomendaciones"></div>
+                <div class="lg:col-span-1 bg-white rounded-xl shadow-md flex flex-col h-96 break-inside-avoid border border-gray-100">
+                    <div class="p-3 bg-sun-gold text-white font-bold text-center uppercase text-sm">Voz del Colaborador</div>
+                    <div class="overflow-y-auto p-3 space-y-3 bg-gray-50 flex-1" id="feedRecomendaciones"></div>
                 </div>
 
-                <div class="lg:col-span-2 bg-white rounded-xl shadow-md overflow-hidden flex flex-col h-96">
-                    <div class="p-4 border-b flex justify-between items-center bg-gray-50">
-                        <h3 class="font-bold text-gray-700">Últimos Registros</h3>
+                <div class="lg:col-span-2 bg-white rounded-xl shadow-md flex flex-col h-96 break-inside-avoid border border-gray-100">
+                    <div class="p-3 border-b flex justify-between items-center bg-gray-50">
+                        <h3 class="font-bold text-gray-700 text-sm">Registros</h3>
                         <span class="bg-sun-green text-white text-xs px-2 py-1 rounded-full" id="totalCount">0</span>
                     </div>
                     <div class="overflow-auto flex-1">
-                        <table class="w-full text-sm text-left text-gray-500">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-100 sticky top-0">
+                        <table class="w-full text-xs text-left text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-100">
                                 <tr>
-                                    <th class="px-4 py-3">Fecha</th>
-                                    <th class="px-4 py-3">Nombre</th>
-                                    <th class="px-4 py-3">Puesto</th>
-                                    <th class="px-4 py-3">Salida</th>
+                                    <th class="px-3 py-2">Fecha</th>
+                                    <th class="px-3 py-2">Nombre</th>
+                                    <th class="px-3 py-2">Puesto</th>
+                                    <th class="px-3 py-2">Salida</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody" class="divide-y divide-gray-200"></tbody>
@@ -192,36 +226,16 @@
         const adminClient = supabase.createClient(supabaseUrl, supabaseKey)
 
         const charts = {};
-
-        // ORDEN ESTRICTO PARA LAS ESCALAS
         const ORDER_ESCALA = ['SIEMPRE', 'CASI SIEMPRE', 'A VECES', 'CASI NUNCA', 'NUNCA'];
-
-        // --- PALETAS DE COLORES ---
         
-        // 1. PALETA RANCHO (Alto Contraste)
-        const PALETA_DISTINTIVA = [
-            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
-            '#9966FF', '#FF9F40', '#8AC249', '#607D8B'
-        ];
-
-        // 2. PALETA MAPA DE CALOR (Semáforo Gradual)
-        // Corresponde al orden: Siempre -> Casi Siempre -> A Veces -> Casi Nunca -> Nunca
-        const MAPA_CALOR = [
-            '#2E7D32', // SIEMPRE: Verde Fuerte (Sun Green)
-            '#7CB342', // CASI SIEMPRE: Verde Hoja
-            '#FDD835', // A VECES: Amarillo Sol
-            '#FB8C00', // CASI NUNCA: Naranja
-            '#D32F2F'  // NUNCA: Rojo Alarma
-        ];
+        const PALETA_DISTINTIVA = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#8AC249', '#607D8B'];
+        const MAPA_CALOR = ['#2E7D32', '#7CB342', '#FDD835', '#FB8C00', '#D32F2F'];
 
         // --- 2. AUTH ---
         async function checkSession() {
             const { data: { session } } = await adminClient.auth.getSession()
-            if (session) {
-                showDashboard()
-            } else {
-                document.getElementById('login-screen').classList.remove('hidden')
-            }
+            if (session) showDashboard()
+            else document.getElementById('login-screen').classList.remove('hidden')
         }
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -230,9 +244,8 @@
             const password = document.getElementById('password').value
             const { error } = await adminClient.auth.signInWithPassword({ email, password })
             if (error) {
-                const errorMsg = document.getElementById('loginError');
-                errorMsg.innerText = "Error: " + error.message;
-                errorMsg.classList.remove('hidden');
+                document.getElementById('loginError').innerText = "Error: " + error.message;
+                document.getElementById('loginError').classList.remove('hidden');
             } else {
                 showDashboard()
             }
@@ -260,6 +273,9 @@
             const start = document.getElementById('startDate').value
             const end = document.getElementById('endDate').value + 'T23:59:59'
 
+            // Actualizar header de impresión
+            document.getElementById('printDateRange').innerText = `Periodo: ${start} al ${end.split('T')[0]}`;
+
             const { data, error } = await adminClient
                 .from('entrevistas_salida')
                 .select('*')
@@ -270,32 +286,22 @@
             if (error) { alert('Error: ' + error.message); return; }
             
             document.getElementById('kpi-renuncias').innerText = data.length;
+            document.getElementById('kpi-print').innerText = data.length;
             document.getElementById('totalCount').innerText = data.length;
 
             renderTable(data);
             renderRecomendaciones(data);
 
-            // Helpers para colores simples
-            const cRed = '#D32F2F';   // Salida
-            const cGreen = '#2E7D32'; // Ingreso
+            const cRed = '#D32F2F';
+            const cGreen = '#2E7D32';
 
-            // --- GENERACIÓN DE GRÁFICOS ---
-            
-            // 1. Motivos Salida (ROJO)
             createChart('chartSalida', 'bar', prepareData(data, 'motivo_salida'), cRed, { indexAxis: 'y' });
-            
-            // 2. Motivos Ingreso (VERDE)
             createChart('chartIngreso', 'bar', prepareData(data, 'motivo_ingreso'), cGreen, { indexAxis: 'y' });
-
-            // 3. Regresaría (Doughnut)
             createChart('chartRegresaria', 'doughnut', prepareData(data, 'regresaria_trabajar'), [cGreen, cRed, '#Gray']);
-
-            // 4. Demografía (Rancho con colores distintivos)
             createChart('chartRancho', 'pie', prepareData(data, 'rancho'), PALETA_DISTINTIVA);
             createChart('chartPuesto', 'bar', prepareData(data, 'puesto'), '#455A64', { indexAxis: 'y' });
 
-            // 5. Clima (MAPA DE CALOR)
-            // Usamos la paleta MAPA_CALOR que coincide con el orden ORDER_ESCALA
+            // Clima (Mapa de Calor)
             createChart('chartLider', 'bar', prepareData(data, 'apoyo_lider', ORDER_ESCALA), MAPA_CALOR);
             createChart('chartPago', 'bar', prepareData(data, 'pago_acorde', ORDER_ESCALA), MAPA_CALOR);
             createChart('chartInstalaciones', 'bar', prepareData(data, 'instalaciones_adecuadas', ORDER_ESCALA), MAPA_CALOR);
@@ -303,18 +309,12 @@
             createChart('chartCapacitacion', 'bar', prepareData(data, 'capacitacion_induccion', ORDER_ESCALA), MAPA_CALOR);
         }
 
-        // FUNCIÓN MAESTRA PARA PREPARAR DATOS
         function prepareData(data, field, fixedOrder = null) {
             let labels, values;
-            
             if (fixedOrder) {
-                // Si hay un orden fijo (para las escalas), lo respetamos
                 labels = fixedOrder;
-                values = fixedOrder.map(label => 
-                    data.filter(row => row[field] === label).length
-                );
+                values = fixedOrder.map(label => data.filter(row => row[field] === label).length);
             } else {
-                // Si no, contamos normalmente
                 const counts = data.reduce((acc, curr) => {
                     const val = curr[field] || 'N/A';
                     acc[val] = (acc[val] || 0) + 1;
@@ -330,14 +330,7 @@
             const ctx = document.getElementById(canvasId).getContext('2d');
             if (charts[canvasId]) charts[canvasId].destroy();
 
-            // Lógica de colores mejorada
-            let bgColors = colors;
-            // Si nos pasan un solo color (string), creamos array
-            if (typeof colors === 'string') {
-                bgColors = Array(chartData.labels.length).fill(colors);
-            }
-            // NOTA: Si nos pasan el array MAPA_CALOR, Chart.js lo asigna en orden a cada barra.
-            // Como forzamos el orden de las etiquetas con ORDER_ESCALA, los colores calzan perfecto.
+            let bgColors = typeof colors === 'string' ? Array(chartData.labels.length).fill(colors) : colors;
 
             charts[canvasId] = new Chart(ctx, {
                 type: type,
@@ -352,17 +345,10 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: type === 'doughnut' || type === 'pie' }
-                    },
+                    plugins: { legend: { display: type === 'doughnut' || type === 'pie', position: 'bottom', labels: { boxWidth: 10, font: {size: 10} } } },
                     scales: {
-                        // Ocultar eje X en las escalas para limpiar visualmente (opcional, aquí lo dejo visible pero sutil)
-                        x: { display: type !== 'pie' && type !== 'doughnut' },
-                        y: { 
-                            display: type !== 'pie' && type !== 'doughnut',
-                            beginAtZero: true, 
-                            ticks: { stepSize: 1 } // Para que no muestre decimales en conteos
-                        }
+                        x: { display: type !== 'pie' && type !== 'doughnut', ticks: { font: {size: 9} } },
+                        y: { display: type !== 'pie' && type !== 'doughnut', beginAtZero: true, ticks: { stepSize: 1, font: {size: 9} } }
                     },
                     ...extraOptions
                 }
@@ -376,10 +362,10 @@
                 const date = new Date(row.created_at).toLocaleDateString('es-MX', {day: '2-digit', month: '2-digit'});
                 tbody.innerHTML += `
                     <tr class="bg-white hover:bg-gray-50 transition">
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${date}</td>
-                        <td class="px-4 py-2 text-gray-900 font-bold text-xs truncate max-w-[150px]">${row.nombre_completo}</td>
-                        <td class="px-4 py-2 text-xs truncate max-w-[120px]">${row.puesto}</td>
-                        <td class="px-4 py-2 text-red-600 font-bold text-xs truncate max-w-[150px]">${row.motivo_salida}</td>
+                        <td class="px-3 py-2 whitespace-nowrap">${date}</td>
+                        <td class="px-3 py-2 font-bold truncate max-w-[120px]">${row.nombre_completo}</td>
+                        <td class="px-3 py-2 truncate max-w-[100px]">${row.puesto}</td>
+                        <td class="px-3 py-2 text-red-600 font-bold truncate max-w-[120px]">${row.motivo_salida}</td>
                     </tr>
                 `;
             });
@@ -390,14 +376,14 @@
             container.innerHTML = '';
             const recs = data.filter(r => r.recomendaciones && r.recomendaciones.length > 2);
             if(recs.length === 0) {
-                container.innerHTML = '<p class="text-gray-400 text-center text-sm italic">Sin recomendaciones en este periodo.</p>';
+                container.innerHTML = '<p class="text-gray-400 text-center text-xs italic">Sin recomendaciones.</p>';
                 return;
             }
             recs.forEach(r => {
                 container.innerHTML += `
-                    <div class="bg-white p-3 rounded border border-gray-200 shadow-sm text-sm">
+                    <div class="bg-white p-2 rounded border border-gray-200 shadow-sm text-xs">
                         <p class="text-gray-800 italic">"${r.recomendaciones}"</p>
-                        <div class="mt-2 text-xs text-right text-gray-400 font-bold">- ${r.puesto} (${r.rancho})</div>
+                        <div class="mt-1 text-[10px] text-right text-gray-400 font-bold">- ${r.puesto} (${r.rancho})</div>
                     </div>
                 `;
             });

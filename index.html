@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrevista de Salida - Sun Berries</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-100 min-h-screen py-10 px-4">
+
+    <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8">
+        
+        <div class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-green-700">Agrícola Sun Berries</h1>
+            <p class="text-gray-500 mt-2">Entrevista de Salida</p>
+        </div>
+
+        <form id="exitForm" class="space-y-6">
+            
+            <div>
+                <label class="block font-medium text-gray-700">Nombre completo *</label>
+                <input type="text" name="nombre_completo" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 border focus:border-green-500 focus:ring-green-500">
+            </div>
+
+            <div>
+                <label class="block font-medium text-gray-700">¿En qué rancho trabajas? *</label>
+                <select name="rancho" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 border bg-white">
+                    <option value="">Selecciona una opción...</option>
+                    <option value="Pocitos">Pocitos</option>
+                    <option value="Majadas">Majadas</option>
+                    <option value="San Guillermo">San Guillermo</option>
+                    <option value="Barro 1">Barro 1</option>
+                    <option value="Barro 2">Barro 2</option>
+                    <option value="Barro 3">Barro 3</option>
+                    <option value="Departamentos">Departamentos</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block font-medium text-gray-700">¿Cuál es tu puesto? *</label>
+                <select id="puesto" name="puesto" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 border bg-white" onchange="checkOtro('puesto')">
+                    <option value="">Selecciona una opción...</option>
+                    <option value="Encargado de campo">Encargado de campo</option>
+                    <option value="Coordinador de campo">Coordinador de campo</option>
+                    <option value="Lider de cuadrilla">Lider de cuadrilla</option>
+                    <option value="Auxiliar de campo">Auxiliar de campo</option>
+                    <option value="Lider de fumigacion">Lider de fumigacion</option>
+                    <option value="Fumigador">Fumigador</option>
+                    <option value="Lider de riego">Lider de riego</option>
+                    <option value="Auxiliar de riego">Auxiliar de riego</option>
+                    <option value="Vigilante">Vigilante</option>
+                    <option value="Reclutador">Reclutador</option>
+                    <option value="Limpieza">Limpieza</option>
+                    <option value="Chofer de ruta">Chofer de ruta</option>
+                    <option value="Chofer de campo">Chofer de campo</option>
+                    <option value="Almacenista">Almacenista</option>
+                    <option value="Cocinera">Cocinera</option>
+                    <option value="Otros">Otros (Especificar)</option>
+                </select>
+                <input type="text" id="puesto_otro" class="mt-2 w-full p-2 border rounded hidden" placeholder="Especifique su puesto">
+            </div>
+
+            <div>
+                <label class="block font-medium text-gray-700 mb-2">¿Cuál fue el motivo de su ingreso? *</label>
+                <div class="space-y-2" id="motivo_ingreso_container">
+                    <label class="flex items-center"><input type="radio" name="motivo_ingreso" value="Necesidad" class="mr-2"> Necesidad</label>
+                    <label class="flex items-center"><input type="radio" name="motivo_ingreso" value="Gusto al campo" class="mr-2"> Gusto al campo</label>
+                    <label class="flex items-center"><input type="radio" name="motivo_ingreso" value="Recomendación" class="mr-2"> Recomendación</label>
+                    <label class="flex items-center"><input type="radio" name="motivo_ingreso" value="Tiempo Libre" class="mr-2"> Tiempo Libre</label>
+                    <label class="flex items-center"><input type="radio" name="motivo_ingreso" value="Cercania" class="mr-2"> Cercanía</label>
+                    <label class="flex items-center"><input type="radio" name="motivo_ingreso" value="Prestaciones" class="mr-2"> Prestaciones</label>
+                    <label class="flex items-center"><input type="radio" name="motivo_ingreso" value="Sueldos" class="mr-2"> Sueldos</label>
+                    <label class="flex items-center"><input type="radio" name="motivo_ingreso" value="Ambiente Laboral" class="mr-2"> Ambiente Laboral</label>
+                    <label class="flex items-center"><input type="radio" name="motivo_ingreso" value="Otros" class="mr-2" onchange="toggleOtro('motivo_ingreso_otro', true)"> Otros</label>
+                    <input type="text" id="motivo_ingreso_otro" class="ml-6 p-1 border rounded hidden w-1/2" placeholder="Especifique">
+                </div>
+            </div>
+
+            <div>
+                <label class="block font-medium text-gray-700 mb-2">Motivos de Salida *</label>
+                <select id="motivo_salida" name="motivo_salida" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 border bg-white" onchange="checkOtro('motivo_salida')">
+                     <option value="">Selecciona...</option>
+                     <option value="Horario de trabajo">Horario de trabajo</option>
+                     <option value="Sueldos">Sueldos</option>
+                     <option value="Prestaciones de ley">Prestaciones de ley</option>
+                     <option value="Bonos">Bonos</option>
+                     <option value="Área asignada">Área asignada</option>
+                     <option value="Coordinador / Líder">Coordinador / Líder</option>
+                     <option value="Falta de oportunidades">Falta de oportunidades de crecimiento</option>
+                     <option value="Reglas de la empresa">Reglas de la empresa</option>
+                     <option value="Días de descanso">Días de descanso</option>
+                     <option value="Motivos foráneos">Motivos foráneos</option>
+                     <option value="Trato recibido">Trato recibido</option>
+                     <option value="Escuela">Escuela</option>
+                     <option value="Otros">Otros</option>
+                </select>
+                <input type="text" id="motivo_salida_otro" class="mt-2 w-full p-2 border rounded hidden" placeholder="Especifique motivo">
+            </div>
+
+            <div class="bg-gray-50 p-4 rounded-lg">
+                <h3 class="font-bold text-gray-700 mb-4">Evaluación de la Experiencia</h3>
+                
+                <div class="space-y-6">
+                    <div class="pregunta-escala" data-name="apoyo_lider" data-label="¿Recibió apoyo de su líder inmediato?"></div>
+                    <div class="pregunta-escala" data-name="pago_acorde" data-label="¿Pago acorde a actividades?"></div>
+                    <div class="pregunta-escala" data-name="instalaciones_adecuadas" data-label="¿Instalaciones adecuadas?"></div>
+                    <div class="pregunta-escala" data-name="equipos_herramientas" data-label="¿Equipos y herramientas necesarios?"></div>
+                    <div class="pregunta-escala" data-name="capacitacion_induccion" data-label="¿Capacitación adecuada?"></div>
+                </div>
+            </div>
+
+            <div>
+                <label class="block font-medium text-gray-700">¿Regresaría a trabajar con Agrícola Sun Berries? *</label>
+                <div class="mt-2 space-x-4">
+                    <label class="inline-flex items-center"><input type="radio" name="regresaria_trabajar" value="Si" required class="mr-2"> Sí</label>
+                    <label class="inline-flex items-center"><input type="radio" name="regresaria_trabajar" value="No" class="mr-2"> No</label>
+                </div>
+            </div>
+
+            <div>
+                <label class="block font-medium text-gray-700">Recomendaciones para mejorar como empresa *</label>
+                <textarea name="recomendaciones" required rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 border focus:border-green-500"></textarea>
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full bg-green-600 text-white font-bold py-3 px-4 rounded hover:bg-green-700 transition duration-300">
+                Enviar Entrevista
+            </button>
+            <p id="mensaje" class="text-center text-green-600 font-bold hidden mt-4">¡Gracias! Información guardada correctamente.</p>
+
+        </form>
+    </div>
+
+    <script>
+        // --- 1. CONFIGURACIÓN ---
+        // ¡PEGA AQUÍ TUS DATOS DE SUPABASE!
+        const supabaseUrl = 'https://kqetrbmwznmlizibquus.supabase.co'
+        const supabaseKey = 'sb_secret_zXm_JOiGGrcwv9r4Ozffqg_3qZs6Std'
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey)
+
+        // --- 2. GENERADOR DE ESCALAS (Para no repetir HTML) ---
+        const escalaOptions = ['SIEMPRE', 'CASI SIEMPRE', 'A VECES', 'CASI NUNCA', 'NUNCA'];
+        document.querySelectorAll('.pregunta-escala').forEach(div => {
+            const name = div.dataset.name;
+            const label = div.dataset.label;
+            let html = `<label class="block font-medium text-sm text-gray-700 mb-1">${label} *</label><div class="flex flex-wrap gap-4">`;
+            escalaOptions.forEach(opt => {
+                html += `<label class="inline-flex items-center text-sm"><input type="radio" name="${name}" value="${opt}" required class="mr-1 text-green-600"> ${opt}</label>`;
+            });
+            html += `</div>`;
+            div.innerHTML = html;
+        });
+
+        // --- 3. LÓGICA DE "OTROS" ---
+        function checkOtro(id) {
+            const select = document.getElementById(id);
+            const input = document.getElementById(id + '_otro');
+            if (select.value.includes('Otros')) {
+                input.classList.remove('hidden');
+                input.required = true;
+            } else {
+                input.classList.add('hidden');
+                input.required = false;
+            }
+        }
+        
+        // Listener para radio buttons de motivo ingreso
+        document.querySelectorAll('input[name="motivo_ingreso"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const input = document.getElementById('motivo_ingreso_otro');
+                if (e.target.value === 'Otros') {
+                    input.classList.remove('hidden');
+                    input.required = true;
+                } else {
+                    input.classList.add('hidden');
+                    input.required = false;
+                }
+            });
+        });
+
+        // --- 4. ENVÍO DEL FORMULARIO ---
+        document.getElementById('exitForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = "Enviando...";
+
+            const formData = new FormData(e.target);
+            const dataObj = Object.fromEntries(formData.entries());
+
+            // Procesar campos "Otros"
+            if (dataObj.puesto === 'Otros') dataObj.puesto = document.getElementById('puesto_otro').value;
+            if (dataObj.motivo_ingreso === 'Otros') dataObj.motivo_ingreso = document.getElementById('motivo_ingreso_otro').value;
+            if (dataObj.motivo_salida === 'Otros') dataObj.motivo_salida = document.getElementById('motivo_salida_otro').value;
+
+            // Insertar en Supabase
+            const { error } = await supabase.from('entrevistas_salida').insert([dataObj]);
+
+            if (error) {
+                alert('Error al guardar: ' + error.message);
+                btn.disabled = false;
+                btn.innerText = "Enviar Entrevista";
+            } else {
+                document.getElementById('exitForm').reset();
+                document.getElementById('exitForm').classList.add('hidden');
+                document.getElementById('mensaje').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

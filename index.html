@@ -165,17 +165,24 @@
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxZXRyYm13em5tbGl6aWJxdXVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MzkxOTMsImV4cCI6MjA4NDQxNTE5M30.G06gOQmC5034XLEdGwfQeir6AgcnZa-GVWh2xxXtrhc'
         const clienteSupabase = supabase.createClient(supabaseUrl, supabaseKey)
 
-        // --- LÓGICA ---
+        // --- LÓGICA DE ESCALAS (MODO LISTA VERTICAL) ---
         const escalaOptions = ['SIEMPRE', 'CASI SIEMPRE', 'A VECES', 'CASI NUNCA', 'NUNCA'];
+        
         document.querySelectorAll('.pregunta-escala').forEach(div => {
             const name = div.dataset.name;
             const label = div.dataset.label;
-            let html = `<label class="block font-bold text-gray-700 mb-2">${label} *</label><div class="flex flex-wrap gap-3">`;
+            
+            // CAMBIO CLAVE: "flex-col" fuerza que los elementos se apilen verticalmente
+            let html = `<label class="block font-bold text-gray-700 mb-3">${label} *</label>
+                        <div class="flex flex-col gap-3">`; 
+            
             escalaOptions.forEach(opt => {
-                html += `<label class="inline-flex items-center text-sm px-3 py-1 bg-white border border-gray-300 rounded-full hover:bg-green-50 hover:border-sun-green cursor-pointer transition">
-                            <input type="radio" name="${name}" value="${opt}" required class="mr-2 text-sun-green focus:ring-sun-green"> ${opt}
+                html += `<label class="flex items-center p-3 bg-white border border-gray-300 rounded-lg hover:bg-green-50 hover:border-sun-green cursor-pointer transition">
+                            <input type="radio" name="${name}" value="${opt}" required class="mr-3 h-5 w-5 text-sun-green focus:ring-sun-green"> 
+                            <span class="text-sm font-medium">${opt}</span>
                          </label>`;
             });
+            
             html += `</div>`;
             div.innerHTML = html;
         });
@@ -240,6 +247,7 @@
     </script>
 </body>
 </html>
+
 
 
 

@@ -95,26 +95,28 @@
                 </div>
             </div>
 
-            <div>
-                <label class="block font-bold text-sun-green text-lg mb-2">Motivos de Salida *</label>
-                <select id="motivo_salida" name="motivo_salida" required class="w-full rounded-lg border-gray-300 shadow-sm p-3 border-2 bg-white focus:border-sun-green focus:ring-sun-green focus:outline-none" onchange="checkOtro('motivo_salida')">
-                     <option value="">Selecciona...</option>
-                     <option value="Horario de trabajo">Horario de trabajo</option>
-                     <option value="Sueldos">Sueldos</option>
-                     <option value="Prestaciones de ley">Prestaciones de ley</option>
-                     <option value="Bonos">Bonos</option>
-                     <option value="Área asignada">Área asignada</option>
-                     <option value="Coordinador / Líder">Coordinador / Líder</option>
-                     <option value="Falta de oportunidades">Falta de oportunidades de crecimiento</option>
-                     <option value="Reglas de la empresa">Reglas de la empresa</option>
-                     <option value="Días de descanso">Días de descanso</option>
-                     <option value="Motivos foráneos">Motivos foráneos</option>
-                     <option value="Trato recibido">Trato recibido</option>
-                     <option value="Escuela">Escuela</option>
-                     <option value="Otros">Otros</option>
-                </select>
-                <input type="text" id="motivo_salida_otro" class="mt-2 w-full p-2 border-2 border-gray-300 rounded-lg hidden focus:border-sun-green focus:outline-none" placeholder="Especifique motivo">
-            </div>
+            <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+    <label class="block font-bold text-sun-green text-lg mb-3">Motivos de Salida *</label>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Horario de trabajo" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Horario de trabajo</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Sueldos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Sueldos</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Prestaciones de ley" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Prestaciones de ley</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Bonos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Bonos</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Área asignada" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Área asignada</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Coordinador / Líder" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Coordinador / Líder</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Falta de oportunidades" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Falta de oportunidades</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Reglas de la empresa" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Reglas de la empresa</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Días de descanso" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Días de descanso</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Motivos foráneos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Motivos foráneos</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Trato recibido" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Trato recibido</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Escuela" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Escuela</label>
+        
+        <div class="col-span-1 md:col-span-2">
+            <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Otros" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Otros</label>
+            <input type="text" id="motivo_salida_otro" class="mt-2 ml-7 p-2 border rounded hidden w-3/4 focus:border-sun-green focus:outline-none" placeholder="Especifique motivo">
+        </div>
+    </div>
+</div>
 
             <div class="bg-sun-light bg-opacity-40 p-6 rounded-xl border border-green-100">
                 <h3 class="font-bold text-sun-green text-xl mb-6 border-b border-green-200 pb-2">Evaluación de la Experiencia</h3>
@@ -238,6 +240,7 @@
     </script>
 </body>
 </html>
+
 
 
 

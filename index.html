@@ -12,9 +12,9 @@
                 extend: {
                     colors: {
                         sun: {
-                            green: '#006400', // Verde oscuro del logo (aprox)
+                            green: '#006400',
                             light: '#e6f4e6',
-                            gold: '#fccb06',  // Amarillo del sol
+                            gold: '#fccb06',
                         }
                     }
                 }
@@ -78,60 +78,66 @@
             </div>
 
             <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
-    <label class="block font-bold text-sun-green text-lg mb-3">¿Cuál fue el motivo de su ingreso? *</label>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Necesidad" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Necesidad</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Gusto al campo" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Gusto al campo</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Recomendación" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Recomendación</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Tiempo Libre" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Tiempo Libre</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Cercania" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Cercanía</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Prestaciones" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Prestaciones</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Sueldos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Sueldos</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Ambiente Laboral" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Ambiente Laboral</label>
-    </div>
+                <label class="block font-bold text-sun-green text-lg mb-3">¿Cuál fue el motivo de su ingreso? *</label>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Necesidad" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Necesidad</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Gusto al campo" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Gusto al campo</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Recomendación" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Recomendación</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Tiempo Libre" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Tiempo Libre</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Cercania" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Cercanía</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Prestaciones" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Prestaciones</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Sueldos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Sueldos</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Ambiente Laboral" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Ambiente Laboral</label>
+                </div>
 
-    <div class="mt-3">
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition w-full md:w-1/2"><input type="radio" name="motivo_ingreso" value="Otros" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Otros</label>
-        <input type="text" id="motivo_ingreso_otro" class="mt-2 w-full p-2 border-2 border-gray-300 rounded-lg hidden focus:border-sun-green focus:outline-none" placeholder="Especifique su motivo">
-    </div>
-</div>
+                <div class="space-y-2">
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition w-full md:w-1/2">
+                        <input type="radio" name="motivo_ingreso" value="Otros" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> 
+                        <span class="font-medium">Otros</span>
+                    </label>
+                    <input type="text" id="motivo_ingreso_detalle" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-sun-green focus:outline-none bg-white" placeholder="Detalles adicionales (Obligatorio si seleccionó 'Otros')">
+                </div>
+            </div>
 
-           <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
-    <label class="block font-bold text-sun-green text-lg mb-3">Motivos de Salida *</label>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Horario de trabajo" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Horario de trabajo</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Sueldos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Sueldos</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Prestaciones de ley" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Prestaciones de ley</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Bonos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Bonos</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Área asignada" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Área asignada</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Coordinador / Líder" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Coordinador / Líder</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Falta de oportunidades" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Falta de oportunidades</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Reglas de la empresa" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Reglas de la empresa</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Días de descanso" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Días de descanso</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Motivos foráneos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Motivos foráneos</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Trato recibido" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Trato recibido</label>
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Escuela" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Escuela</label>
-    </div>
-    
-    <div class="mt-3">
-        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition w-full md:w-1/2"><input type="radio" name="motivo_salida" value="Otros" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Otros</label>
-        <input type="text" id="motivo_salida_otro" class="mt-2 w-full p-2 border-2 border-gray-300 rounded-lg hidden focus:border-sun-green focus:outline-none" placeholder="Especifique motivo">
-    </div>
-</div>
-</div>
+            <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                <label class="block font-bold text-sun-green text-lg mb-3">Motivos de Salida *</label>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Horario de trabajo" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Horario de trabajo</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Sueldos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Sueldos</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Prestaciones de ley" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Prestaciones de ley</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Bonos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Bonos</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Área asignada" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Área asignada</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Coordinador / Líder" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Coordinador / Líder</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Falta de oportunidades" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Falta de oportunidades</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Reglas de la empresa" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Reglas de la empresa</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Días de descanso" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Días de descanso</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Motivos foráneos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Motivos foráneos</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Trato recibido" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Trato recibido</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Escuela" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Escuela</label>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition w-full md:w-1/2">
+                        <input type="radio" name="motivo_salida" value="Otros" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> 
+                        <span class="font-medium">Otros</span>
+                    </label>
+                    <textarea id="motivo_salida_detalle" rows="2" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-sun-green focus:outline-none bg-white" placeholder="Detalles adicionales (Obligatorio si seleccionó 'Otros')"></textarea>
+                </div>
+            </div>
 
             <div class="bg-sun-light bg-opacity-40 p-6 rounded-xl border border-green-100">
                 <h3 class="font-bold text-sun-green text-xl mb-6 border-b border-green-200 pb-2">Evaluación de la Experiencia</h3>
                 <div class="space-y-8">
                      <label class="block font-bold text-gray-500">Seleccione una sola opción a cada pregunta</label>
-                <div class="space-y-8">
-                    <div class="pregunta-escala" data-name="apoyo_lider" data-label="¿Tuvo usted el apoyo de su lider para las actividades que desempeñó?"></div>
-                    <div class="pregunta-escala" data-name="pago_acorde" data-label="¿Recibió el pago adecuado a las actividades que realizó?"></div>
-                    <div class="pregunta-escala" data-name="instalaciones_adecuadas" data-label="¿Contaba con las instalaciones adecuadas para realizar su trabajo?"></div>
-                    <div class="pregunta-escala" data-name="equipos_herramientas" data-label="¿Disponía usted de los equipos y herramientas adecuadas para realizar su trabajo?"></div>
-                    <div class="pregunta-escala" data-name="capacitacion_induccion" data-label="¿Contó usted con la capacitación e inducción adecuada para realizar su trabajo?"></div>
+                    <div class="space-y-8">
+                        <div class="pregunta-escala" data-name="apoyo_lider" data-label="¿Tuvo usted el apoyo de su lider para las actividades que desempeñó?"></div>
+                        <div class="pregunta-escala" data-name="pago_acorde" data-label="¿Recibió el pago adecuado a las actividades que realizó?"></div>
+                        <div class="pregunta-escala" data-name="instalaciones_adecuadas" data-label="¿Contaba con las instalaciones adecuadas para realizar su trabajo?"></div>
+                        <div class="pregunta-escala" data-name="equipos_herramientas" data-label="¿Disponía usted de los equipos y herramientas adecuadas para realizar su trabajo?"></div>
+                        <div class="pregunta-escala" data-name="capacitacion_induccion" data-label="¿Contó usted con la capacitación e inducción adecuada para realizar su trabajo?"></div>
+                    </div>
                 </div>
             </div>
 
@@ -176,7 +182,6 @@
             const name = div.dataset.name;
             const label = div.dataset.label;
             
-            // CAMBIO CLAVE: "flex-col" fuerza que los elementos se apilen verticalmente
             let html = `<label class="block font-bold text-gray-700 mb-3">${label} *</label>
                         <div class="flex flex-col gap-3">`; 
             
@@ -203,20 +208,6 @@
                 input.required = false;
             }
         }
-        
-        document.querySelectorAll('input[name="motivo_ingreso"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                const input = document.getElementById('motivo_ingreso_otro');
-                if (e.target.value === 'Otros') {
-                    input.classList.remove('hidden');
-                    input.required = true;
-                    input.focus();
-                } else {
-                    input.classList.add('hidden');
-                    input.required = false;
-                }
-            });
-        });
 
         // --- ENVÍO DEL FORMULARIO ---
         document.getElementById('exitForm').addEventListener('submit', async (e) => {
@@ -234,12 +225,10 @@
             
             // 1. Procesar Motivo Ingreso
             const detalleIngreso = document.getElementById('motivo_ingreso_detalle').value.trim();
-            // Si eligió 'Otros' y no escribió nada, alerta
             if (dataObj.motivo_ingreso === 'Otros' && !detalleIngreso) {
                 alert('Por favor especifique los detalles del Motivo de Ingreso (Otros).');
                 resetBtn(); return;
             }
-            // Si escribió algo, lo concatenamos: "Sueldos (Detalle: Pagan poco)"
             if (detalleIngreso) {
                 dataObj.motivo_ingreso = `${dataObj.motivo_ingreso} (Detalle: ${detalleIngreso})`;
             }
@@ -283,11 +272,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-

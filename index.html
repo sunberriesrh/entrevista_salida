@@ -78,26 +78,25 @@
             </div>
 
             <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                <label class="block font-bold text-sun-green text-lg mb-3">¿Cuál fue el motivo de su ingreso? *</label>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="motivo_ingreso_container">
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Necesidad" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Necesidad</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Gusto al campo" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Gusto al campo</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Recomendación" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Recomendación</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Tiempo Libre" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Tiempo Libre</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Cercania" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Cercanía</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Prestaciones" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Prestaciones</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Sueldos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Sueldos</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Ambiente Laboral" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Ambiente Laboral</label>
-                    <div class="col-span-1 md:col-span-2">
-                        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Otros" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Otros</label>
-                        <input type="text" id="motivo_ingreso_otro" class="mt-2 ml-7 p-2 border rounded hidden w-3/4 focus:border-sun-green focus:outline-none" placeholder="Especifique">
-                    </div>
-                </div>
+    <label class="block font-bold text-sun-green text-lg mb-3">¿Cuál fue el motivo de su ingreso? *</label>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Necesidad" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Necesidad</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Gusto al campo" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Gusto al campo</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Recomendación" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Recomendación</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Tiempo Libre" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Tiempo Libre</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Cercania" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Cercanía</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Prestaciones" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Prestaciones</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Sueldos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Sueldos</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Ambiente Laboral" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Ambiente Laboral</label>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition col-span-1 md:col-span-2"><input type="radio" name="motivo_ingreso" value="Otros" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Otros</label>
+    </div>
+    <input type="text" id="motivo_ingreso_detalle" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-sun-green focus:outline-none" placeholder="Especificar detalles (Opcional si seleccionó una categoría, obligatorio si es 'Otros')">
+</div>
             </div>
 
             <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
     <label class="block font-bold text-sun-green text-lg mb-3">Motivos de Salida *</label>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
         <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Horario de trabajo" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Horario de trabajo</label>
         <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Sueldos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Sueldos</label>
         <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Prestaciones de ley" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Prestaciones de ley</label>
@@ -110,12 +109,10 @@
         <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Motivos foráneos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Motivos foráneos</label>
         <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Trato recibido" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Trato recibido</label>
         <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Escuela" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Escuela</label>
-        
-        <div class="col-span-1 md:col-span-2">
-            <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Otros" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Otros</label>
-            <input type="text" id="motivo_salida_otro" class="mt-2 ml-7 p-2 border rounded hidden w-3/4 focus:border-sun-green focus:outline-none" placeholder="Especifique motivo">
-        </div>
+        <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition col-span-1 md:col-span-2"><input type="radio" name="motivo_salida" value="Otros" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Otros</label>
     </div>
+    <textarea id="motivo_salida_detalle" rows="2" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-sun-green focus:outline-none" placeholder="Especificar detalles (Opcional si seleccionó una categoría, obligatorio si es 'Otros')"></textarea>
+</div>
 </div>
 
             <div class="bg-sun-light bg-opacity-40 p-6 rounded-xl border border-green-100">
@@ -214,6 +211,7 @@
             });
         });
 
+        // --- ENVÍO DEL FORMULARIO ---
         document.getElementById('exitForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
@@ -225,28 +223,60 @@
             const formData = new FormData(e.target);
             const dataObj = Object.fromEntries(formData.entries());
 
-            if (dataObj.puesto === 'Otros') dataObj.puesto = document.getElementById('puesto_otro').value;
-            if (dataObj.motivo_ingreso === 'Otros') dataObj.motivo_ingreso = document.getElementById('motivo_ingreso_otro').value;
-            if (dataObj.motivo_salida === 'Otros') dataObj.motivo_salida = document.getElementById('motivo_salida_otro').value;
+            // --- LÓGICA DE COMBINACIÓN DE TEXTO ---
+            
+            // 1. Procesar Motivo Ingreso
+            const detalleIngreso = document.getElementById('motivo_ingreso_detalle').value.trim();
+            // Si eligió 'Otros' y no escribió nada, alerta
+            if (dataObj.motivo_ingreso === 'Otros' && !detalleIngreso) {
+                alert('Por favor especifique los detalles del Motivo de Ingreso (Otros).');
+                resetBtn(); return;
+            }
+            // Si escribió algo, lo concatenamos: "Sueldos (Detalle: Pagan poco)"
+            if (detalleIngreso) {
+                dataObj.motivo_ingreso = `${dataObj.motivo_ingreso} (Detalle: ${detalleIngreso})`;
+            }
 
+            // 2. Procesar Motivo Salida
+            const detalleSalida = document.getElementById('motivo_salida_detalle').value.trim();
+            if (dataObj.motivo_salida === 'Otros' && !detalleSalida) {
+                alert('Por favor especifique los detalles del Motivo de Salida (Otros).');
+                resetBtn(); return;
+            }
+            if (detalleSalida) {
+                dataObj.motivo_salida = `${dataObj.motivo_salida} (Detalle: ${detalleSalida})`;
+            }
+
+            // 3. Procesar Puesto (si es Otros)
+            if (dataObj.puesto === 'Otros') {
+                const puestoOtro = document.getElementById('puesto_otro').value;
+                if(!puestoOtro) { alert('Especifique su puesto.'); resetBtn(); return; }
+                dataObj.puesto = puestoOtro;
+            }
+
+            // Insertar en Supabase
             const { error } = await clienteSupabase.from('entrevistas_salida').insert([dataObj]);
 
             if (error) {
                 alert('Error al guardar: ' + error.message);
-                btn.disabled = false;
-                btn.innerText = originalText;
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                resetBtn();
             } else {
                 document.getElementById('exitForm').reset();
                 document.getElementById('exitForm').classList.add('hidden');
                 document.getElementById('mensaje').classList.remove('hidden');
-                // Scroll suave al mensaje
                 document.getElementById('mensaje').scrollIntoView({ behavior: 'smooth' });
+            }
+
+            function resetBtn() {
+                btn.disabled = false;
+                btn.innerText = originalText;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
             }
         });
     </script>
 </body>
 </html>
+
 
 
 

@@ -47,9 +47,9 @@
         </div>
     </div>
 
-    <div id="dashboard-screen" class="hidden pb-20">
+    <div id="dashboard-screen" class="hidden pb-20 relative">
         
-        <nav class="bg-sun-green text-white shadow-lg sticky top-0 z-50">
+        <nav class="bg-sun-green text-white shadow-lg sticky top-0 z-40">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-20">
                     <div class="flex items-center gap-4">
@@ -96,21 +96,15 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-white p-5 rounded-xl shadow-md">
                     <h3 class="font-bold text-gray-600 text-center mb-4 text-sm uppercase">Motivos de Salida</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chartSalida"></canvas>
-                    </div>
+                    <div class="relative h-64 w-full"><canvas id="chartSalida"></canvas></div>
                 </div>
                 <div class="bg-white p-5 rounded-xl shadow-md">
                     <h3 class="font-bold text-gray-600 text-center mb-4 text-sm uppercase">Motivos de Ingreso</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chartIngreso"></canvas>
-                    </div>
+                    <div class="relative h-64 w-full"><canvas id="chartIngreso"></canvas></div>
                 </div>
                 <div class="bg-white p-5 rounded-xl shadow-md">
                     <h3 class="font-bold text-gray-600 text-center mb-4 text-sm uppercase">¿Regresaría a trabajar?</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chartRegresaria"></canvas>
-                    </div>
+                    <div class="relative h-64 w-full"><canvas id="chartRegresaria"></canvas></div>
                 </div>
             </div>
 
@@ -118,15 +112,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white p-5 rounded-xl shadow-md">
                     <h3 class="font-bold text-gray-600 text-center mb-4 text-sm uppercase">Bajas por Rancho</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chartRancho"></canvas>
-                    </div>
+                    <div class="relative h-64 w-full"><canvas id="chartRancho"></canvas></div>
                 </div>
                 <div class="bg-white p-5 rounded-xl shadow-md">
                     <h3 class="font-bold text-gray-600 text-center mb-4 text-sm uppercase">Bajas por Puesto</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="chartPuesto"></canvas>
-                    </div>
+                    <div class="relative h-64 w-full"><canvas id="chartPuesto"></canvas></div>
                 </div>
             </div>
 
@@ -175,12 +165,32 @@
                                     <th class="px-4 py-3">Nombre</th>
                                     <th class="px-4 py-3">Puesto</th>
                                     <th class="px-4 py-3">Salida</th>
+                                    <th class="px-4 py-3 text-center">Acciones</th> 
                                 </tr>
                             </thead>
                             <tbody id="tableBody" class="divide-y divide-gray-200"></tbody>
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="detalleModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col transform transition-all">
+            <div class="p-4 bg-sun-green text-white rounded-t-2xl flex justify-between items-center">
+                <h3 class="font-bold text-lg flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Expediente de Salida
+                </h3>
+                <button onclick="closeModal()" class="text-white hover:text-green-200 font-bold text-2xl leading-none">&times;</button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto flex-1 space-y-5" id="modalContent">
+                </div>
+            
+            <div class="p-4 border-t border-gray-200 text-right bg-gray-50 rounded-b-2xl">
+                <button onclick="closeModal()" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 font-bold transition">Cerrar</button>
             </div>
         </div>
     </div>
@@ -192,36 +202,17 @@
         const adminClient = supabase.createClient(supabaseUrl, supabaseKey)
 
         const charts = {};
+        let globalData = []; // NUEVA VARIABLE para guardar los datos y usarlos en el modal
 
-        // ORDEN ESTRICTO PARA LAS ESCALAS
         const ORDER_ESCALA = ['SIEMPRE', 'CASI SIEMPRE', 'A VECES', 'CASI NUNCA', 'NUNCA'];
-
-        // --- PALETAS DE COLORES ---
         
-        // 1. PALETA RANCHO (Alto Contraste)
-        const PALETA_DISTINTIVA = [
-            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
-            '#9966FF', '#FF9F40', '#8AC249', '#607D8B'
-        ];
-
-        // 2. PALETA MAPA DE CALOR (Semáforo Gradual)
-        // Corresponde al orden: Siempre -> Casi Siempre -> A Veces -> Casi Nunca -> Nunca
-        const MAPA_CALOR = [
-            '#2E7D32', // SIEMPRE: Verde Fuerte (Sun Green)
-            '#7CB342', // CASI SIEMPRE: Verde Hoja
-            '#FDD835', // A VECES: Amarillo Sol
-            '#FB8C00', // CASI NUNCA: Naranja
-            '#D32F2F'  // NUNCA: Rojo Alarma
-        ];
+        const PALETA_DISTINTIVA = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#8AC249', '#607D8B'];
+        const MAPA_CALOR = ['#2E7D32', '#7CB342', '#FDD835', '#FB8C00', '#D32F2F'];
 
         // --- 2. AUTH ---
         async function checkSession() {
             const { data: { session } } = await adminClient.auth.getSession()
-            if (session) {
-                showDashboard()
-            } else {
-                document.getElementById('login-screen').classList.remove('hidden')
-            }
+            if (session) { showDashboard() } else { document.getElementById('login-screen').classList.remove('hidden') }
         }
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -233,9 +224,7 @@
                 const errorMsg = document.getElementById('loginError');
                 errorMsg.innerText = "Error: " + error.message;
                 errorMsg.classList.remove('hidden');
-            } else {
-                showDashboard()
-            }
+            } else { showDashboard() }
         })
 
         async function logout() {
@@ -269,32 +258,23 @@
 
             if (error) { alert('Error: ' + error.message); return; }
             
+            globalData = data; // GUARDAMOS LOS DATOS AQUÍ
+
             document.getElementById('kpi-renuncias').innerText = data.length;
             document.getElementById('totalCount').innerText = data.length;
 
             renderTable(data);
             renderRecomendaciones(data);
 
-            // Helpers para colores simples
-            const cRed = '#D32F2F';   // Salida
-            const cGreen = '#2E7D32'; // Ingreso
+            const cRed = '#D32F2F';
+            const cGreen = '#2E7D32';
 
-            // --- GENERACIÓN DE GRÁFICOS ---
-            
-            // 1. Motivos Salida (ROJO)
             createChart('chartSalida', 'bar', prepareData(data, 'motivo_salida'), cRed, { indexAxis: 'y' });
-            
-            // 2. Motivos Ingreso (VERDE)
             createChart('chartIngreso', 'bar', prepareData(data, 'motivo_ingreso'), cGreen, { indexAxis: 'y' });
-
-            // 3. Regresaría (Doughnut)
             createChart('chartRegresaria', 'doughnut', prepareData(data, 'regresaria_trabajar'), [cGreen, cRed, '#Gray']);
-
-            // 4. Demografía (Rancho con colores distintivos)
             createChart('chartRancho', 'pie', prepareData(data, 'rancho'), PALETA_DISTINTIVA);
             createChart('chartPuesto', 'bar', prepareData(data, 'puesto'), '#455A64', { indexAxis: 'y' });
 
-            // 5. Clima (MAPA DE CALOR)
             createChart('chartLider', 'bar', prepareData(data, 'apoyo_lider', ORDER_ESCALA), MAPA_CALOR);
             createChart('chartPago', 'bar', prepareData(data, 'pago_acorde', ORDER_ESCALA), MAPA_CALOR);
             createChart('chartInstalaciones', 'bar', prepareData(data, 'instalaciones_adecuadas', ORDER_ESCALA), MAPA_CALOR);
@@ -302,15 +282,138 @@
             createChart('chartCapacitacion', 'bar', prepareData(data, 'capacitacion_induccion', ORDER_ESCALA), MAPA_CALOR);
         }
 
-        // FUNCIÓN MAESTRA PARA PREPARAR DATOS
+        // --- RENDER TABLA Y MODAL (NUEVO) ---
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            data.forEach((row, index) => { // Pasamos el 'index'
+                const date = new Date(row.created_at).toLocaleDateString('es-MX', {day: '2-digit', month: '2-digit'});
+                tbody.innerHTML += `
+                    <tr class="bg-white hover:bg-gray-50 transition border-b">
+                        <td class="px-4 py-3 whitespace-nowrap text-xs text-gray-500">${date}</td>
+                        <td class="px-4 py-3 text-gray-900 font-bold text-xs truncate max-w-[150px]">${row.nombre_completo}</td>
+                        <td class="px-4 py-3 text-xs truncate max-w-[120px]">${row.puesto}</td>
+                        <td class="px-4 py-3 text-red-600 font-bold text-xs truncate max-w-[150px]">${row.motivo_salida}</td>
+                        <td class="px-4 py-3 text-center">
+                            <button onclick="showDetails(${index})" class="bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-600 hover:text-white px-3 py-1 rounded text-xs font-bold transition">
+                                Ver Detalles
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // FUNCIÓN PARA ABRIR Y LLENAR EL MODAL
+        function showDetails(index) {
+            const row = globalData[index];
+            if(!row) return;
+
+            const content = document.getElementById('modalContent');
+            const dateFull = new Date(row.created_at).toLocaleString('es-MX', { dateStyle: 'long', timeStyle: 'short' });
+
+            // Helper de colores para la escala
+            const getColor = (val) => {
+                if(val === 'SIEMPRE' || val === 'CASI SIEMPRE') return 'text-green-600';
+                if(val === 'NUNCA' || val === 'CASI NUNCA') return 'text-red-600';
+                return 'text-yellow-600';
+            };
+
+            content.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                        <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Colaborador</p>
+                        <p class="font-bold text-xl text-sun-green mt-1">${row.nombre_completo || 'N/A'}</p>
+                        <p class="text-sm font-medium text-gray-700 mt-1 flex items-center gap-1">💼 ${row.puesto || 'N/A'}</p>
+                        <p class="text-sm font-medium text-gray-700 flex items-center gap-1">📍 ${row.rancho || 'N/A'}</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 flex flex-col justify-center">
+                        <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Fecha de Registro</p>
+                        <p class="font-bold text-gray-800 text-lg mt-1">${dateFull}</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="border-l-4 border-green-500 bg-green-50 p-4 rounded-r-xl">
+                        <p class="text-xs text-green-700 uppercase font-bold tracking-wider">Motivo de Ingreso</p>
+                        <p class="font-medium text-gray-800 mt-1">${row.motivo_ingreso || 'N/A'}</p>
+                    </div>
+                    <div class="border-l-4 border-red-500 bg-red-50 p-4 rounded-r-xl">
+                        <p class="text-xs text-red-700 uppercase font-bold tracking-wider">Motivo de Salida</p>
+                        <p class="font-bold text-red-700 mt-1">${row.motivo_salida || 'N/A'}</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-gray-700 border-b border-gray-200 pb-2 mb-3">Evaluación del Clima Laboral</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                        <div class="bg-white p-3 border rounded-lg shadow-sm text-center">
+                            <span class="block text-[10px] text-gray-500 uppercase tracking-wider mb-1">Apoyo Líder</span>
+                            <span class="font-black text-sm ${getColor(row.apoyo_lider)}">${row.apoyo_lider || 'N/A'}</span>
+                        </div>
+                        <div class="bg-white p-3 border rounded-lg shadow-sm text-center">
+                            <span class="block text-[10px] text-gray-500 uppercase tracking-wider mb-1">Pago Acorde</span>
+                            <span class="font-black text-sm ${getColor(row.pago_acorde)}">${row.pago_acorde || 'N/A'}</span>
+                        </div>
+                        <div class="bg-white p-3 border rounded-lg shadow-sm text-center">
+                            <span class="block text-[10px] text-gray-500 uppercase tracking-wider mb-1">Instalaciones</span>
+                            <span class="font-black text-sm ${getColor(row.instalaciones_adecuadas)}">${row.instalaciones_adecuadas || 'N/A'}</span>
+                        </div>
+                        <div class="bg-white p-3 border rounded-lg shadow-sm text-center">
+                            <span class="block text-[10px] text-gray-500 uppercase tracking-wider mb-1">Herramientas</span>
+                            <span class="font-black text-sm ${getColor(row.equipos_herramientas)}">${row.equipos_herramientas || 'N/A'}</span>
+                        </div>
+                        <div class="bg-white p-3 border rounded-lg shadow-sm text-center">
+                            <span class="block text-[10px] text-gray-500 uppercase tracking-wider mb-1">Capacitación</span>
+                            <span class="font-black text-sm ${getColor(row.capacitacion_induccion)}">${row.capacitacion_induccion || 'N/A'}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="md:col-span-1 bg-gray-50 p-4 rounded-xl border border-gray-200 text-center flex flex-col justify-center">
+                        <p class="text-xs text-gray-500 uppercase font-bold tracking-wider mb-2">¿Regresaría a trabajar?</p>
+                        <p class="font-black text-2xl ${row.regresaria_trabajar === 'Si' ? 'text-green-600' : 'text-red-600'}">${row.regresaria_trabajar || 'N/A'}</p>
+                    </div>
+                    <div class="md:col-span-2 bg-yellow-50 p-4 rounded-xl border border-yellow-200">
+                        <p class="text-xs text-yellow-700 uppercase font-bold tracking-wider mb-2 flex items-center gap-1">💡 Recomendaciones</p>
+                        <p class="italic text-gray-800 text-sm leading-relaxed">"${row.recomendaciones || 'Sin comentarios adicionales.'}"</p>
+                    </div>
+                </div>
+            `;
+
+            // Mostrar el modal
+            document.getElementById('detalleModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('detalleModal').classList.add('hidden');
+        }
+
+        // --- UTILIDADES ---
+        function renderRecomendaciones(data) {
+            const container = document.getElementById('feedRecomendaciones');
+            container.innerHTML = '';
+            const recs = data.filter(r => r.recomendaciones && r.recomendaciones.length > 2);
+            if(recs.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center text-sm italic">Sin recomendaciones en este periodo.</p>';
+                return;
+            }
+            recs.forEach(r => {
+                container.innerHTML += `
+                    <div class="bg-white p-3 rounded border border-gray-200 shadow-sm text-sm">
+                        <p class="text-gray-800 italic">"${r.recomendaciones}"</p>
+                        <div class="mt-2 text-xs text-right text-gray-400 font-bold">- ${r.puesto} (${r.rancho})</div>
+                    </div>
+                `;
+            });
+        }
+
         function prepareData(data, field, fixedOrder = null) {
             let labels, values;
-            
             if (fixedOrder) {
                 labels = fixedOrder;
-                values = fixedOrder.map(label => 
-                    data.filter(row => row[field] === label).length
-                );
+                values = fixedOrder.map(label => data.filter(row => row[field] === label).length);
             } else {
                 const counts = data.reduce((acc, curr) => {
                     const val = curr[field] || 'N/A';
@@ -336,62 +439,18 @@
                 type: type,
                 data: {
                     labels: chartData.labels,
-                    datasets: [{
-                        data: chartData.values,
-                        backgroundColor: bgColors,
-                        borderWidth: 1
-                    }]
+                    datasets: [{ data: chartData.values, backgroundColor: bgColors, borderWidth: 1 }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: type === 'doughnut' || type === 'pie' }
-                    },
+                    plugins: { legend: { display: type === 'doughnut' || type === 'pie' } },
                     scales: {
                         x: { display: type !== 'pie' && type !== 'doughnut' },
-                        y: { 
-                            display: type !== 'pie' && type !== 'doughnut',
-                            beginAtZero: true, 
-                            ticks: { stepSize: 1 } 
-                        }
+                        y: { display: type !== 'pie' && type !== 'doughnut', beginAtZero: true, ticks: { stepSize: 1 } }
                     },
                     ...extraOptions
                 }
-            });
-        }
-
-        function renderTable(data) {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-            data.forEach(row => {
-                const date = new Date(row.created_at).toLocaleDateString('es-MX', {day: '2-digit', month: '2-digit'});
-                tbody.innerHTML += `
-                    <tr class="bg-white hover:bg-gray-50 transition">
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${date}</td>
-                        <td class="px-4 py-2 text-gray-900 font-bold text-xs truncate max-w-[150px]">${row.nombre_completo}</td>
-                        <td class="px-4 py-2 text-xs truncate max-w-[120px]">${row.puesto}</td>
-                        <td class="px-4 py-2 text-red-600 font-bold text-xs truncate max-w-[150px]">${row.motivo_salida}</td>
-                    </tr>
-                `;
-            });
-        }
-
-        function renderRecomendaciones(data) {
-            const container = document.getElementById('feedRecomendaciones');
-            container.innerHTML = '';
-            const recs = data.filter(r => r.recomendaciones && r.recomendaciones.length > 2);
-            if(recs.length === 0) {
-                container.innerHTML = '<p class="text-gray-400 text-center text-sm italic">Sin recomendaciones en este periodo.</p>';
-                return;
-            }
-            recs.forEach(r => {
-                container.innerHTML += `
-                    <div class="bg-white p-3 rounded border border-gray-200 shadow-sm text-sm">
-                        <p class="text-gray-800 italic">"${r.recomendaciones}"</p>
-                        <div class="mt-2 text-xs text-right text-gray-400 font-bold">- ${r.puesto} (${r.rancho})</div>
-                    </div>
-                `;
             });
         }
 
@@ -399,4 +458,3 @@
     </script>
 </body>
 </html>
-

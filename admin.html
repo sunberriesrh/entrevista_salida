@@ -534,17 +534,33 @@
 
         function prepareData(data, field, fixedOrder = null) {
             let labels, values;
+            
+            // Helper to extract parts from comma-separated strings
+            const getParts = (val) => {
+                if (!val) return ['N/A'];
+                return val.split(',').map(s => {
+                    s = s.trim();
+                    // Group all "Otros: ..." entries into "Otros" for the charts
+                    if (s.startsWith('Otros:')) return 'Otros';
+                    return s;
+                });
+            };
+
+            const allValuesFlat = data.flatMap(row => getParts(row[field]));
+
             if (fixedOrder) {
                 labels = fixedOrder;
-                values = fixedOrder.map(label => data.filter(row => row[field] === label).length);
+                values = fixedOrder.map(label => allValuesFlat.filter(v => v === label).length);
             } else {
-                const counts = data.reduce((acc, curr) => {
-                    const val = curr[field] || 'N/A';
+                const counts = allValuesFlat.reduce((acc, val) => {
                     acc[val] = (acc[val] || 0) + 1;
                     return acc;
                 }, {});
-                labels = Object.keys(counts);
-                values = Object.values(counts);
+                
+                // Sort by frequency for better visualization if not fixed order
+                const sortedEntries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+                labels = sortedEntries.map(e => e[0]);
+                values = sortedEntries.map(e => e[1]);
             }
             return { labels, values };
         }

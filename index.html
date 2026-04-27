@@ -78,22 +78,23 @@
             </div>
 
             <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                <label class="block font-bold text-sun-green text-lg mb-3">¿Cuál fue el motivo de su ingreso? *</label>
+                <label class="block font-bold text-sun-green text-lg">¿Cuál fue el motivo de su ingreso? *</label>
+                <p class="text-xs text-gray-500 mb-3 italic">Puedes seleccionar varias opciones</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Necesidad" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Necesidad</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Gusto al campo" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Gusto al campo</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Recomendación" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Recomendación</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Tiempo Libre" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Tiempo Libre</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Cercania" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Cercanía</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Prestaciones" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Prestaciones</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Sueldos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Sueldos</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_ingreso" value="Ambiente Laboral" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Ambiente Laboral</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_ingreso" value="Necesidad" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Necesidad</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_ingreso" value="Gusto al campo" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Gusto al campo</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_ingreso" value="Recomendación" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Recomendación</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_ingreso" value="Tiempo Libre" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Tiempo Libre</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_ingreso" value="Cercania" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Cercanía</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_ingreso" value="Prestaciones" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Prestaciones</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_ingreso" value="Sueldos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Sueldos</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_ingreso" value="Ambiente Laboral" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Ambiente Laboral</label>
                 </div>
 
                 <div class="space-y-2">
                     <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition w-full md:w-1/2">
-                        <input type="radio" name="motivo_ingreso" value="Otros" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> 
+                        <input type="checkbox" name="motivo_ingreso" value="Otros" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> 
                         <span class="font-medium">Otros</span>
                     </label>
                     <textarea id="motivo_ingreso_detalle" rows="2" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-sun-green focus:outline-none bg-white" placeholder="Puedes desarrollar tu respuesta todo lo que necesites aquí"></textarea>
@@ -101,26 +102,27 @@
             </div>
 
             <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                <label class="block font-bold text-sun-green text-lg mb-3">Motivos de Salida *</label>
+                <label class="block font-bold text-sun-green text-lg">Motivos de Salida *</label>
+                <p class="text-xs text-gray-500 mb-3 italic">Puedes seleccionar varias opciones</p>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Horario de trabajo" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Horario de trabajo</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Sueldos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Sueldos</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Prestaciones de ley" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Prestaciones de ley</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Bonos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Bonos</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Área asignada" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Área asignada</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Coordinador / Líder" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Coordinador / Líder</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Falta de oportunidades" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Falta de oportunidades</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Reglas de la empresa" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Reglas de la empresa</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Días de descanso" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Días de descanso</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Motivos foráneos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Motivos foráneos</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Trato recibido" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Trato recibido</label>
-                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="radio" name="motivo_salida" value="Escuela" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> Escuela</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_salida" value="Horario de trabajo" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Horario de trabajo</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_salida" value="Sueldos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Sueldos</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_salida" value="Prestaciones de ley" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Prestaciones de ley</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_salida" value="Bonos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Bonos</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_salida" value="Área asignada" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Área asignada</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_salida" value="Coordinador / Líder" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Coordinador / Líder</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_salida" value="Falta de oportunidades" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Falta de oportunidades</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_salida" value="Reglas de la empresa" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Reglas de la empresa</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_salida" value="Días de descanso" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Días de descanso</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_salida" value="Motivos foráneos" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Motivos foráneos</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_salida" value="Trato recibido" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Trato recibido</label>
+                    <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition"><input type="checkbox" name="motivo_salida" value="Escuela" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> Escuela</label>
                 </div>
 
                 <div class="space-y-2">
                     <label class="flex items-center p-2 hover:bg-white rounded cursor-pointer transition w-full md:w-1/2">
-                        <input type="radio" name="motivo_salida" value="Otros" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green"> 
+                        <input type="checkbox" name="motivo_salida" value="Otros" class="mr-3 h-4 w-4 text-sun-green focus:ring-sun-green rounded"> 
                         <span class="font-medium">Otros</span>
                     </label>
                     <textarea id="motivo_salida_detalle" rows="2" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-sun-green focus:outline-none bg-white" placeholder="Puedes desarrollar tu respuesta todo lo que necesites aquí"></textarea>
@@ -214,6 +216,13 @@
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             const originalText = btn.innerText;
+            
+            const resetBtn = () => {
+                btn.disabled = false;
+                btn.innerText = originalText;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            };
+
             btn.disabled = true;
             btn.innerText = "Enviando...";
             btn.classList.add('opacity-50', 'cursor-not-allowed');
@@ -221,27 +230,43 @@
             const formData = new FormData(e.target);
             const dataObj = Object.fromEntries(formData.entries());
 
-            // --- LÓGICA DE COMBINACIÓN DE TEXTO ---
+            // --- LÓGICA DE COMBINACIÓN DE TEXTO (MULTI-OPCIÓN) ---
             
             // 1. Procesar Motivo Ingreso
+            const motivosIngresoChecked = Array.from(document.querySelectorAll('input[name="motivo_ingreso"]:checked')).map(el => el.value);
+            if (motivosIngresoChecked.length === 0) {
+                alert('Por favor seleccione al menos un Motivo de Ingreso.');
+                resetBtn(); return;
+            }
             const detalleIngreso = document.getElementById('motivo_ingreso_detalle').value.trim();
-            if (dataObj.motivo_ingreso === 'Otros' && !detalleIngreso) {
+            if (motivosIngresoChecked.includes('Otros') && !detalleIngreso) {
                 alert('Por favor especifique los detalles del Motivo de Ingreso (Otros).');
                 resetBtn(); return;
             }
-            if (detalleIngreso) {
-                dataObj.motivo_ingreso = `${dataObj.motivo_ingreso} (Detalle: ${detalleIngreso})`;
+            
+            const indexOtrosI = motivosIngresoChecked.indexOf('Otros');
+            if (indexOtrosI !== -1 && detalleIngreso) {
+                motivosIngresoChecked[indexOtrosI] = `Otros: ${detalleIngreso}`;
             }
+            dataObj.motivo_ingreso = motivosIngresoChecked.join(', ');
 
             // 2. Procesar Motivo Salida
+            const motivosSalidaChecked = Array.from(document.querySelectorAll('input[name="motivo_salida"]:checked')).map(el => el.value);
+            if (motivosSalidaChecked.length === 0) {
+                alert('Por favor seleccione al menos un Motivo de Salida.');
+                resetBtn(); return;
+            }
             const detalleSalida = document.getElementById('motivo_salida_detalle').value.trim();
-            if (dataObj.motivo_salida === 'Otros' && !detalleSalida) {
+            if (motivosSalidaChecked.includes('Otros') && !detalleSalida) {
                 alert('Por favor especifique los detalles del Motivo de Salida (Otros).');
                 resetBtn(); return;
             }
-            if (detalleSalida) {
-                dataObj.motivo_salida = `${dataObj.motivo_salida} (Detalle: ${detalleSalida})`;
+            
+            const indexOtrosS = motivosSalidaChecked.indexOf('Otros');
+            if (indexOtrosS !== -1 && detalleSalida) {
+                motivosSalidaChecked[indexOtrosS] = `Otros: ${detalleSalida}`;
             }
+            dataObj.motivo_salida = motivosSalidaChecked.join(', ');
 
             // 3. Procesar Puesto (si es Otros)
             if (dataObj.puesto === 'Otros') {
@@ -261,12 +286,6 @@
                 document.getElementById('exitForm').classList.add('hidden');
                 document.getElementById('mensaje').classList.remove('hidden');
                 document.getElementById('mensaje').scrollIntoView({ behavior: 'smooth' });
-            }
-
-            function resetBtn() {
-                btn.disabled = false;
-                btn.innerText = originalText;
-                btn.classList.remove('opacity-50', 'cursor-not-allowed');
             }
         });
     </script>
